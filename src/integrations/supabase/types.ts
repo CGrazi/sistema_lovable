@@ -14,7 +14,122 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      clientes: {
+        Row: {
+          cpf: string
+          created_at: string
+          created_by: string | null
+          email: string
+          endereco: string
+          id: string
+          nome: string
+          observacoes: string
+          telefone: string
+          updated_at: string
+        }
+        Insert: {
+          cpf?: string
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          endereco?: string
+          id?: string
+          nome: string
+          observacoes?: string
+          telefone?: string
+          updated_at?: string
+        }
+        Update: {
+          cpf?: string
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          endereco?: string
+          id?: string
+          nome?: string
+          observacoes?: string
+          telefone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ordens_servico: {
+        Row: {
+          aparelho: string
+          cliente_id: string
+          created_at: string
+          created_by: string | null
+          defeito: string
+          id: string
+          imei: string
+          numero: number
+          observacoes: string
+          status: Database["public"]["Enums"]["os_status"]
+          updated_at: string
+          valor: number
+        }
+        Insert: {
+          aparelho: string
+          cliente_id: string
+          created_at?: string
+          created_by?: string | null
+          defeito: string
+          id?: string
+          imei?: string
+          numero?: never
+          observacoes?: string
+          status?: Database["public"]["Enums"]["os_status"]
+          updated_at?: string
+          valor?: number
+        }
+        Update: {
+          aparelho?: string
+          cliente_id?: string
+          created_at?: string
+          created_by?: string | null
+          defeito?: string
+          id?: string
+          imei?: string
+          numero?: never
+          observacoes?: string
+          status?: Database["public"]["Enums"]["os_status"]
+          updated_at?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ordens_servico_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          cargo: string
+          created_at: string
+          id: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          cargo?: string
+          created_at?: string
+          id: string
+          nome?: string
+          updated_at?: string
+        }
+        Update: {
+          cargo?: string
+          created_at?: string
+          id?: string
+          nome?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +138,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      os_status:
+        | "recebido"
+        | "em_analise"
+        | "aguardando_peca"
+        | "em_reparo"
+        | "pronto"
+        | "entregue"
+        | "cancelado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +272,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      os_status: [
+        "recebido",
+        "em_analise",
+        "aguardando_peca",
+        "em_reparo",
+        "pronto",
+        "entregue",
+        "cancelado",
+      ],
+    },
   },
 } as const
