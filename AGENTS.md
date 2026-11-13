@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Data access for clientes/ordens/profiles goes through the browser Supabase client with RLS (all `authenticated` users share shop data); add server functions only for privileged work. Why: single shared shop, RLS is the boundary.
+- Order status labels/colors live only in `src/lib/os.ts` (`STATUS_LIST`) mapped to `status-*` utilities in `src/styles.css`. Why: one source for the enum's UI.
