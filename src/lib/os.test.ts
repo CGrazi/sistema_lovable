@@ -25,6 +25,6 @@ describe("status da ordem", () => {
   });
   it("tem 7 status, começando em Recebido", () => {
     expect(STATUS_LIST).toHaveLength(7);
-    expect(STATUS_LIST[0].value).toBe("recebido");
+    expect(STATUS_LIST[0]?.value).toBe("recebido");
   });
 });

@@ -26,8 +26,8 @@ function safeRedirect(value: unknown): string | undefined {
 }
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
-    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+  validateSearch: (search: Record<string, unknown>): { redirect?: string | undefined } => ({
+    redirect: typeof search["redirect"] === "string" ? search["redirect"] : undefined,
   }),
   head: () => ({
     meta: [
@@ -79,18 +79,18 @@ function AuthPage() {
   async function entrar(e: React.FormEvent) {
     e.preventDefault();
     const parsed = loginSchema.safeParse(login);
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) return void toast.error(parsed.error.issues[0]?.message ?? "Dados inválidos");
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword(parsed.data);
     setLoading(false);
-    if (error) return toast.error("E-mail ou senha incorretos.");
+    if (error) return void toast.error("E-mail ou senha incorretos.");
     navigate({ to: destino, replace: true });
   }
 
   async function cadastrar(e: React.FormEvent) {
     e.preventDefault();
     const parsed = signupSchema.safeParse(signup);
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) return void toast.error(parsed.error.issues[0]?.message ?? "Dados inválidos");
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email: parsed.data.email,
@@ -103,10 +103,10 @@ function AuthPage() {
     setLoading(false);
     if (error) {
       const msg = error.message.toLowerCase();
-      if (msg.includes("registered")) return toast.error("Este e-mail já possui conta. Faça login.");
+      if (msg.includes("registered")) return void toast.error("Este e-mail já possui conta. Faça login.");
       if (msg.includes("pwned") || msg.includes("weak") || msg.includes("leaked"))
-        return toast.error("Essa senha é muito comum. Escolha outra mais forte.");
-      return toast.error("Não foi possível criar a conta.");
+        return void toast.error("Essa senha é muito comum. Escolha outra mais forte.");
+      return void toast.error("Não foi possível criar a conta.");
     }
     if (data.session) {
       toast.success("Conta criada! Bem-vindo(a) à FixCell.");
@@ -118,7 +118,7 @@ function AuthPage() {
 
   async function oauth(provider: "google" | "lovable") {
     const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin + "/auth" });
-    if (result.error) return toast.error("Não foi possível entrar agora.");
+    if (result.error) return void toast.error("Não foi possível entrar agora.");
     if (result.redirected) return;
     navigate({ to: destino, replace: true });
   }

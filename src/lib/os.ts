@@ -15,8 +15,9 @@ export const STATUS_LIST: { value: OsStatus; label: string; className: string }[
   { value: "cancelado", label: "Cancelado", className: "status-cancelado" },
 ];
 
+const FALLBACK_STATUS = { value: "recebido" as OsStatus, label: "Recebido", className: "status-recebido" };
 export function statusInfo(status: OsStatus) {
-  return STATUS_LIST.find((s) => s.value === status) ?? STATUS_LIST[0];
+  return STATUS_LIST.find((s) => s.value === status) ?? FALLBACK_STATUS;
 }
 
 /** An order is "open" while the shop still has work or a hand-off to do. */

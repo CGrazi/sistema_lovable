@@ -61,7 +61,7 @@ export function PerfilDialog({
           className="grid gap-4"
           onSubmit={(e) => {
             e.preventDefault();
-            if (!nome.trim()) return toast.error("Informe seu nome");
+            if (!nome.trim()) return void toast.error("Informe seu nome");
             mutation.mutate();
           }}
         >
